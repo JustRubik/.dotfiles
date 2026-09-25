@@ -1,0 +1,27 @@
+[env]
+  TERM = "xterm-256color"
+  SHELL = "zsh"
+
+[window]
+  opacity = 0.85
+  startup_mode = "FullScreen"
+  title = "JustRubik"
+  decorations_theme_variant = "Dark"
+  padding.x = 30
+  padding.y = 10
+
+[cursor]
+  style = { shape = "Block", blinking = "Off" }
+
+[font]
+  normal = { family = "CaskaydiaMono Nerd Font", style = "Regular" }
+  size = 18
+
+[terminal]
+  shell = "zsh"
+
+[keyboard]
+  bindings = [
+    { key = "Space", mods = "Control|Shift", action = "ToggleViMode" },
+    { key = "F", mods = "Control|Shift", action = "ToggleFullScreen" },
+  ]
