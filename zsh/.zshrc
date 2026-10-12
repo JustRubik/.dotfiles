@@ -117,7 +117,9 @@ setopt extendedglob
 alias v='nvim'
 alias nivm='nvim'
 
-# My aliases: 
+# More efficient works, hope so
+alias vcf='cd ~/.config/nvim/ && nvim'
+
 alias cls='clear'
 alias x='exit'
 alias acli='arduino-cli'
@@ -125,6 +127,7 @@ alias fp='flatpak'
 alias lrc='luarocks'
 alias ii='xdg-open'
 alias oc='octave-cli'
+alias py='python3'
 
 
 alias sus='systemctl suspend'
@@ -191,8 +194,8 @@ gdc () {
     return 1
   fi
 
-  message="${@[-1]}"
-  files=("${@:1:-2}")
+  local message="$argv[-1]"
+  local -a files=("${argv[1,-2]}")
 
   git add -- "${files[@]}" || return 1
   git commit -m "$message"
