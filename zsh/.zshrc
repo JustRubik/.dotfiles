@@ -128,11 +128,12 @@ alias lrc='luarocks'
 alias ii='xdg-open'
 alias oc='octave-cli'
 alias py='python3'
+alias yt='yt-dlp'
 
 
 alias sus='systemctl suspend'
 alias reb='systemctl reboot'
-alias shut='sudo shutdown -h now'
+alias shut='shutdown -h now'
 
 # Add color to some commands (took from bash)
 alias ll='ls -l'
@@ -202,17 +203,22 @@ gdc () {
 }
 
 
-# Thêm .local/bin 
-export PATH="$HOME/.local/bin:$PATH"
 
 # export STYLUA_CONFIG="$HOME/.config/stylua/stylua.toml"
 
 # # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 setopt NO_BEEP
-
 eval "$(luarocks path --bin)"
 
-export PATH="$HOME/.deno/bin:$PATH"
 
-export PATH="$HOME/bin:$PATH"
+# Export full PATHs
+# Rules: add path with ':'
+newPATH=""
+newPATH+="$HOME/.local/bin:"
+newPATH+="$HOME/.deno/bin:"
+PATH="$newPATH$PATH"
+typeset -U PATH
+export PATH
+
+eval "$(gh completion -s zsh)"

@@ -4,9 +4,10 @@
 
 [window]
   opacity = 0.85
-  startup_mode = "FullScreen"
+  startup_mode = "Maximized"
   title = "JustRubik"
   decorations_theme_variant = "Dark"
+  dynamic_padding = true
   padding.x = 30
   padding.y = 10
 
@@ -14,7 +15,7 @@
   style = { shape = "Block", blinking = "Off" }
 
 [font]
-  normal = { family = "CaskaydiaMono Nerd Font", style = "Regular" }
+  normal = { family = "Cascadia Mono NF", style = "Regular" }
   size = 18
 
 [terminal]
