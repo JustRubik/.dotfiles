@@ -1,0 +1,143 @@
+# My scripts file, seperated from .zshrc,
+# and it helps a lot.
+
+# My alias for c/c++
+# Compile & Run with gcc/g++
+crg () {
+  if [ -z "$1" ]; then
+    echo "[ERROR]: No files found"
+    return 1
+  fi
+
+  ext="${1##*.}"
+  ext=$(echo "$ext" | tr '[:upper:]' '[:lower:]')
+
+  filename="${1%.*}"
+  version="${2:-11}"
+
+  if [ "$ext" = "cpp" ]; then
+    ggg="g++"
+    std="c++"
+  elif [ "$ext" = "c" ]; then
+    ggg="gcc"
+    std="c"
+  else
+    echo "[ERROR]: False extension"
+    return 1
+  fi
+  
+  "$ggg" -std="$std$version" -O3 -Wall "$1" -o "$filename" && "./$filename"
+}
+
+# Package Manager
+_pkg_manager() {
+    [[ "$(uname -s)" == "Linux" ]] || {
+        echo "Unsupported operating system."
+        return 1
+    }
+
+    [[ -f /etc/os-release ]] || {
+        echo "Cannot identify Linux distribution."
+        return 1
+    }
+
+    local ID ID_LIKE
+    source /etc/os-release
+
+    case "$ID $ID_LIKE" in
+        *debian*) echo "apt" ;;
+        *fedora*) echo "dnf" ;;
+        *arch*)   echo "pacman" ;;
+        *)
+            echo "Unsupported distribution: $ID" >&2
+            return 1
+            ;;
+    esac
+}
+
+# Install package
+chain() {
+    local pkgname="$1"
+    local pm
+
+    [[ -n "$pkgname" ]] || {
+        echo "Usage: chain <package>"
+        return 1
+    }
+
+    pm=$(_pkg_manager) || return 1
+
+    case "$pm" in
+        apt)
+            apt-cache show "$pkgname" 2>/dev/null |
+                grep -q '^Package:' || {
+                    echo "Cannot find package: $pkgname"
+                    return 1
+                }
+            sudo apt install "$pkgname"
+            ;;
+        dnf)
+            dnf info --available "$pkgname" >/dev/null 2>&1 || {
+                echo "Cannot find package: $pkgname"
+                return 1
+            }
+            sudo dnf install "$pkgname"
+            ;;
+        pacman)
+            pacman -Si "$pkgname" >/dev/null 2>&1 || {
+                echo "Cannot find package: $pkgname"
+                return 1
+            }
+            sudo pacman -S "$pkgname"
+            ;;
+    esac
+}
+
+# Search packages
+search() {
+    local query="$1"
+    local pm
+
+    [[ -n "$query" ]] || {
+        echo "Usage: search <query>"
+        return 1
+    }
+
+    pm=$(_pkg_manager) || return 1
+
+    case "$pm" in
+        apt)
+            apt search "$query"
+            ;;
+        dnf)
+            dnf search "$query"
+            ;;
+        pacman)
+            pacman -Ss "$query"
+            ;;
+    esac
+}
+
+# Git default commit
+gdc () {
+  if (( $# < 2 )); then
+    echo "Usage: gdc <file> [file ...] <commit message>"
+    return 1
+  fi
+
+  local message="$argv[-1]"
+  local -a files=("${argv[1,-2]}")
+
+  git add -- "${files[@]}" || return 1
+  git commit -m "$message"
+}
+
+# Session notes, deleted in new session
+sen () {
+  local FORMAT="${1:-txt}"
+
+  local DATE="$(date '+%Y%m%d')"
+
+  mkdir -p /tmp/notes
+  nvim "/tmp/notes/$DATE.$FORMAT"
+}

@@ -146,63 +146,7 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-
-
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-
-# My alias for c/c++
-# Compile & Run with gcc/g++
-crg () {
-  if [ -z "$1" ]; then
-    echo "[ERROR]: No files found"
-    return 1
-  fi
-
-  ext="${1##*.}"
-  ext=$(echo "$ext" | tr '[:upper:]' '[:lower:]')
-
-  filename="${1%.*}"
-  version="${2:-11}"
-
-  if [ "$ext" = "cpp" ]; then
-    ggg="g++"
-    std="c++"
-  elif [ "$ext" = "c" ]; then
-    ggg="gcc"
-    std="c"
-  else
-    echo "[ERROR]: False extension"
-    return 1
-  fi
-  
-  "$ggg" -std="$std$version" -O3 -Wall "$1" -o "$filename" && "./$filename"
-}
-
-# Check and Install
-chain () {
-  local pkgname="${1}"
-  if apt-cache show "$pkgname" > /dev/null 2>&1; then
-    sudo apt install "$pkgname"
-  else
-    echo "Cannot find package: $pkgname"
-  fi
-}
-
-# Git default commit
-gdc () {
-  if (( $# < 2 )); then
-    echo "Usage: gdc <file> [file ...] <commit message>"
-    return 1
-  fi
-
-  local message="$argv[-1]"
-  local -a files=("${argv[1,-2]}")
-
-  git add -- "${files[@]}" || return 1
-  git commit -m "$message"
-}
-
-
 
 # export STYLUA_CONFIG="$HOME/.config/stylua/stylua.toml"
 
@@ -222,3 +166,5 @@ typeset -U PATH
 export PATH
 
 eval "$(gh completion -s zsh)"
+
+source "$HOME/.zsh_scripts"
