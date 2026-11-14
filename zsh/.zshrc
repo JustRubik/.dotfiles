@@ -213,7 +213,7 @@ eval "$(luarocks path --bin)"
 
 
 # Export full PATHs
-# Rules: add path with ':'
+# Rules: add path with 'newPATH+=' .. ':'
 newPATH=""
 newPATH+="$HOME/.local/bin:"
 newPATH+="$HOME/.deno/bin:"
