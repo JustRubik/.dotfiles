@@ -141,3 +141,8 @@ sen () {
   mkdir -p /tmp/notes
   nvim "/tmp/notes/$DATE.$FORMAT"
 }
+
+reset_network () {
+  sudo systemctl restart NetworkManager
+}
+alias resn='reset_network'
